@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ConstructorSelection } from './components/ConstructorSelection';
 import type { ListItem } from './components/ConstructorSelection';
 import './App.css';

@@ -100,7 +100,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
   const handleSelect = (item: ListItem) => {
     onItemSelect(item);
     setSearchTerm('');
-    setIsOpen(false); // Закрываем список после выбора
+    setIsOpen(false);
   };
 
   /** Группировка элементов по категориям */
@@ -113,8 +113,14 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
 
   // --- Рендер ---
 
+  // Классы для обертки
+  const wrapperClasses = [
+    styles.wrapper,
+    isOpen ? styles.open : '',
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={styles.wrapper} ref={wrapperRef}>
+    <div className={wrapperClasses} ref={wrapperRef}>
       {/* Заголовочная часть */}
       <div className={styles.header}>
         {/* Левая часть: иконка + текст */}

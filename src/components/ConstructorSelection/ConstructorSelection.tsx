@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { PathIcon, PinIcon } from '../../assets/icons';
+import { PinPathIcon, PlusIcon, ArrowUpIcon } from '../../assets/icons';
 import styles from './ConstructorSelection.module.css';
 
 // --- Типы ---
@@ -125,12 +125,9 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
       <div className={styles.header}>
         {/* Левая часть: иконка + текст */}
         <div className={styles.leftSection}>
-          {/* Иконка из двух SVG */}
+          {/* Объединенная иконка */}
           <div className={styles.iconContainer}>
-            <div className={styles.iconWrapper}>
-              <PathIcon className={styles.pathIcon} />
-              <PinIcon className={styles.pinIcon} />
-            </div>
+            <PinPathIcon className={styles.icon} />
           </div>
 
           {/* Текстовый блок */}
@@ -142,13 +139,22 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
           </div>
         </div>
 
-        {/* Правая часть: кнопка (меняется в зависимости от состояния) */}
+        {/* Правая часть: кнопка с иконкой */}
         <button 
           className={styles.actionButton}
           onClick={toggleDropdown}
           type="button"
         >
-          {isOpen ? collapseButtonText : addButtonText}
+          <span className={styles.buttonContent}>
+            <span className={styles.buttonText}>
+              {isOpen ? collapseButtonText : addButtonText}
+            </span>
+            {isOpen ? (
+              <ArrowUpIcon className={styles.buttonIcon} />
+            ) : (
+              <PlusIcon className={styles.buttonIcon} />
+            )}
+          </span>
         </button>
       </div>
 

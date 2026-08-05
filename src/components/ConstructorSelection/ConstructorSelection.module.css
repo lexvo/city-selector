@@ -59,6 +59,22 @@
   min-width: 0;
 }
 
+/* --- Иконка (объединенная) --- */
+.iconContainer {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  color: #555; /* Цвет иконки, можно управлять через CSS */
+}
+
 /* --- Иконка (составная) --- */
 .iconContainer {
   flex-shrink: 0;
@@ -140,12 +156,42 @@
 
 .actionButton:hover {
   color: #0056b3;
+}
+
+.actionButton:hover .buttonText {
   text-decoration: underline;
 }
 
 .actionButton:active {
   transform: scale(0.96);
 }
+
+/* --- Контейнер для текста и иконки --- */
+.buttonContent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buttonText {
+  transition: text-decoration 0.2s ease;
+}
+
+/* --- Иконка рядом с текстом --- */
+.buttonIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: currentColor;
+  transition: transform 0.3s ease;
+}
+
+/* --- Анимация для иконки стрелки (опционально) --- */
+.buttonIcon {
+  transition: transform 0.3s ease;
+}
+
+/* Остальные стили без изменений... */
 
 /* --- Поиск --- */
 .searchContainer {

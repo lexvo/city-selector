@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { PinPathIcon, PlusIcon, ArrowUpIcon } from '../../assets/icons';
+import { PinPathIcon, PlusIcon, ArrowUpIcon, SearchIcon } from '../../assets/icons';
 import styles from './ConstructorSelection.module.css';
 
 // --- Типы ---
@@ -9,31 +9,21 @@ export interface ListItem {
   id: string | number;
   name: string;
   category: 'city' | 'country';
+  isFeatured?: boolean;
 }
 
 /** Свойства компонента */
 export interface ConstructorSelectionProps {
-  /** Список элементов для выбора */
   items: ListItem[];
-  /** Выбранный элемент */
   selectedItem: ListItem | null;
-  /** Callback при выборе */
   onItemSelect: (item: ListItem) => void;
-  /** Заголовок (например, "Откуда едем?") */
   title?: string;
-  /** Текст-заполнитель, когда ничего не выбрано */
   placeholder?: string;
-  /** Текст кнопки "Добавить" */
   addButtonText?: string;
-  /** Текст кнопки "Свернуть" */
   collapseButtonText?: string;
-  /** Callback при клике на кнопку (опционально) */
   onButtonClick?: () => void;
-  /** Плейсхолдер для поиска */
   searchPlaceholder?: string;
-  /** Заголовок секции "Города России" */
   citiesTitle?: string;
-  /** Заголовок секции "Другие страны" */
   countriesTitle?: string;
 }
 
@@ -52,17 +42,12 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
   citiesTitle = 'Города России',
   countriesTitle = 'Другие страны',
 }) => {
-  // Состояния
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
 
-  // Refs
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // --- Эффекты ---
-
-  /** Фильтрация элементов при поиске */
   useEffect(() => {
     const lowercasedTerm = searchTerm.toLowerCase().trim();
     if (lowercasedTerm === '') {
@@ -75,7 +60,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     }
   }, [searchTerm, items]);
 
-  /** Закрытие при клике вне компонента */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -86,9 +70,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // --- Обработчики ---
-
-  /** Переключение состояния (открыть/закрыть) */
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
     if (onButtonClick) {
@@ -96,14 +77,12 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     }
   };
 
-  /** Выбор элемента */
   const handleSelect = (item: ListItem) => {
     onItemSelect(item);
     setSearchTerm('');
     setIsOpen(false);
   };
 
-  /** Группировка элементов по категориям */
   const groupedItems = filteredItems.reduce<Record<string, ListItem[]>>((acc, item) => {
     const key = item.category === 'city' ? 'cities' : 'countries';
     if (!acc[key]) acc[key] = [];
@@ -111,9 +90,13 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     return acc;
   }, {});
 
-  // --- Рендер ---
+  // Определяем состояние иконки
+  const getIconState = () => {
+    if (selectedItem) return 'selected'; // Зеленый
+    if (isOpen) return 'open'; // Синий
+    return 'default'; // Прозрачный
+  };
 
-  // Классы для обертки
   const wrapperClasses = [
     styles.wrapper,
     isOpen ? styles.open : '',
@@ -121,16 +104,13 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
 
   return (
     <div className={wrapperClasses} ref={wrapperRef}>
-      {/* Заголовочная часть */}
       <div className={styles.header}>
-        {/* Левая часть: иконка + текст */}
         <div className={styles.leftSection}>
-          {/* Объединенная иконка */}
-          <div className={styles.iconContainer}>
+          {/* Иконка с фиксированным контейнером 52×52 */}
+          <div className={`${styles.iconContainer} ${styles[getIconState()]}`}>
             <PinPathIcon className={styles.icon} />
           </div>
 
-          {/* Текстовый блок */}
           <div className={styles.textContainer}>
             <div className={styles.title}>{title}</div>
             <div className={`${styles.description} ${!selectedItem ? styles.placeholder : ''}`}>
@@ -139,7 +119,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
           </div>
         </div>
 
-        {/* Правая часть: кнопка с иконкой */}
         <button 
           className={styles.actionButton}
           onClick={toggleDropdown}
@@ -158,10 +137,9 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
         </button>
       </div>
 
-      {/* Выпадающий список (отображается при isOpen) */}
       {isOpen && (
         <div className={styles.dropdown}>
-          {/* Поле поиска */}
+          {/* Поле поиска с иконкой лупы справа */}
           <div className={styles.searchContainer}>
             <input
               type="text"
@@ -171,6 +149,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
               placeholder={searchPlaceholder}
               autoFocus
             />
+            <SearchIcon className={styles.searchIcon} />
             {searchTerm && (
               <button 
                 className={styles.clearButton} 
@@ -182,9 +161,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
             )}
           </div>
 
-          {/* Список элементов */}
           <div className={styles.listContainer}>
-            {/* Города России */}
             {groupedItems.cities && groupedItems.cities.length > 0 && (
               <>
                 <div className={styles.sectionTitle}>{citiesTitle}</div>
@@ -194,7 +171,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
                       key={item.id}
                       className={`${styles.listItem} ${
                         selectedItem?.id === item.id ? styles.selected : ''
-                      }`}
+                      } ${item.isFeatured ? styles.featured : ''}`}
                       onClick={() => handleSelect(item)}
                     >
                       {item.name}
@@ -204,7 +181,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
               </>
             )}
 
-            {/* Другие страны */}
             {groupedItems.countries && groupedItems.countries.length > 0 && (
               <>
                 <div className={styles.sectionTitle}>{countriesTitle}</div>
@@ -224,7 +200,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
               </>
             )}
 
-            {/* Если ничего не найдено */}
             {filteredItems.length === 0 && (
               <div className={styles.noResults}>Ничего не найдено</div>
             )}

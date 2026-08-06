@@ -3,23 +3,18 @@
   width: 920px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   position: relative;
-}
-
-/* --- Общие стили для бордера и скругления --- */
-.wrapper {
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   background-color: #ffffff;
-  transition: box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* --- Фиксированная высота в открытом состоянии --- */
 .wrapper.open {
+  border-color: #007bff;
+  box-shadow: 0 8px 30px rgba(0, 123, 255, 0.12);
   height: 708px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* --- В свернутом состоянии высота автоматическая (86px) --- */
 .wrapper:not(.open) {
   height: 86px;
 }
@@ -35,22 +30,10 @@
   border-radius: 0;
   height: 86px;
   box-sizing: border-box;
-  flex-shrink: 0; /* Запрещаем сжатие */
+  flex-shrink: 0;
 }
 
-/* --- Выпадающий список --- */
-.dropdown {
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0 0 8px 0;
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 86px); /* Оставшееся пространство после заголовка */
-  overflow: hidden;
-}
-
-/* --- Левая секция (иконка + текст) --- */
+/* --- Левая секция --- */
 .leftSection {
   display: flex;
   align-items: center;
@@ -59,53 +42,43 @@
   min-width: 0;
 }
 
-/* --- Иконка (объединенная) --- */
+/* --- Контейнер иконки (всегда 52×52) --- */
 .iconContainer {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+  background-color: transparent; /* Прозрачный по умолчанию */
 }
 
+/* --- Состояние: открыто (синий фон) --- */
+.iconContainer.open {
+  background-color: #e6f0ff;
+}
+
+/* --- Состояние: выбран город (зеленый фон) --- */
+.iconContainer.selected {
+  background-color: #e6f5e6; /* Светло-зеленый */
+}
+
+/* --- Иконка (50×50) --- */
 .icon {
-  width: 32px;
-  height: 32px;
-  color: #555; /* Цвет иконки, можно управлять через CSS */
+  width: 50px;
+  height: 50px;
+  color: #555;
+  transition: color 0.3s ease;
 }
 
-/* --- Иконка (составная) --- */
-.iconContainer {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.iconContainer.open .icon {
+  color: #007bff;
 }
 
-.iconWrapper {
-  position: relative;
-  width: 32px;
-  height: 32px;
-}
-
-.pathIcon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.pinIcon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 16px;
-  height: 16px;
+.iconContainer.selected .icon {
+  color: #28a745; /* Зеленый */
 }
 
 /* --- Текстовый блок --- */
@@ -139,7 +112,7 @@
   color: #b0b0b0;
 }
 
-/* --- Кнопка действия (Добавить / Свернуть) --- */
+/* --- Кнопка действия --- */
 .actionButton {
   flex-shrink: 0;
   padding: 0;
@@ -166,7 +139,6 @@
   transform: scale(0.96);
 }
 
-/* --- Контейнер для текста и иконки --- */
 .buttonContent {
   display: flex;
   align-items: center;
@@ -177,32 +149,35 @@
   transition: text-decoration 0.2s ease;
 }
 
-/* --- Иконка рядом с текстом --- */
 .buttonIcon {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
   color: currentColor;
-  transition: transform 0.3s ease;
 }
 
-/* --- Анимация для иконки стрелки (опционально) --- */
-.buttonIcon {
-  transition: transform 0.3s ease;
+/* --- Выпадающий список --- */
+.dropdown {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 8px 0;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 86px);
+  overflow: hidden;
 }
 
-/* Остальные стили без изменений... */
-
-/* --- Поиск --- */
+/* --- Поиск с иконкой лупы справа --- */
 .searchContainer {
   position: relative;
   padding: 0 20px 12px;
-  flex-shrink: 0; /* Запрещаем сжатие */
+  flex-shrink: 0;
 }
 
 .searchInput {
   width: 100%;
-  padding: 10px 36px 10px 14px;
+  padding: 10px 44px 10px 14px; /* Отступ справа для иконки */
   font-size: 14px;
   line-height: 1.4;
   color: #1a1a1a;
@@ -223,9 +198,22 @@
   color: #999;
 }
 
+/* --- Иконка лупы справа (18×18) --- */
+.searchIcon {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #999;
+  pointer-events: none;
+}
+
+/* --- Кнопка очистки --- */
 .clearButton {
   position: absolute;
-  right: 28px;
+  right: 56px; /* Сдвигаем левее, чтобы не перекрывать лупу */
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
@@ -245,7 +233,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 0 20px 12px;
-  min-height: 0; /* Важно для flex-сжатия */
+  min-height: 0;
 }
 
 .sectionTitle {
@@ -263,7 +251,6 @@
   margin-top: 0;
 }
 
-/* --- Сетка в 3 колонки --- */
 .gridList {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -277,6 +264,11 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.15s ease;
+}
+
+.listItem.featured {
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
 .listItem:hover {

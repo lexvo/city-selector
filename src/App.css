@@ -1,25 +1,8 @@
-/* src/App.css */
-
-/* Основной контейнер страницы */
 .app {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Компонент сверху */
+  align-items: flex-start;
   min-height: 100vh;
   padding: 40px 20px;
   background-color: #f8f9fa;
-}
-
-/* Если нужно убрать скролл при маленьких экранах */
-@media (max-width: 960px) {
-  .app {
-    padding: 20px 16px;
-  }
-}
-
-/* Если экран очень высокий - можно увеличить отступ сверху */
-@media (min-height: 1000px) {
-  .app {
-    padding-top: 80px;
-  }
 }

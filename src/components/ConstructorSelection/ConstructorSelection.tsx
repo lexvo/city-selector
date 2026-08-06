@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { PinPathIcon, PlusIcon, ArrowUpIcon, SearchIcon } from '../../assets/icons';
+import { PinPathIcon, PlusIcon, ArrowUpIcon, SearchIcon, CheckMarkIcon, ExclamationIcon } from '../../assets/icons';
 import styles from './ConstructorSelection.module.css';
 
 // --- Типы ---
 
-/** Элемент списка (город или страна) */
 export interface ListItem {
   id: string | number;
   name: string;
@@ -12,7 +11,6 @@ export interface ListItem {
   isFeatured?: boolean;
 }
 
-/** Свойства компонента */
 export interface ConstructorSelectionProps {
   items: ListItem[];
   selectedItem: ListItem | null;
@@ -21,6 +19,7 @@ export interface ConstructorSelectionProps {
   placeholder?: string;
   addButtonText?: string;
   collapseButtonText?: string;
+  doneButtonText?: string;
   onButtonClick?: () => void;
   searchPlaceholder?: string;
   citiesTitle?: string;
@@ -37,6 +36,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
   placeholder = 'Например "Москва"',
   addButtonText = 'Добавить',
   collapseButtonText = 'Свернуть',
+  doneButtonText = 'Готово',
   onButtonClick,
   searchPlaceholder = 'Начните вводить название, а мы подскажем',
   citiesTitle = 'Города России',
@@ -90,24 +90,23 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     return acc;
   }, {});
 
-  // Определяем состояние иконки
-  const getIconState = () => {
-    if (selectedItem) return 'selected'; // Зеленый
-    if (isOpen) return 'open'; // Синий
-    return 'default'; // Прозрачный
-  };
+  // --- Определяем состояние ---
+  const hasSelectedItem = !!selectedItem;
+  const iconState = hasSelectedItem ? 'selected' : isOpen ? 'open' : 'default';
+  const hasNoResults = isOpen && filteredItems.length === 0 && searchTerm.trim().length > 0;
 
   const wrapperClasses = [
     styles.wrapper,
     isOpen ? styles.open : '',
+    hasSelectedItem ? styles.hasValue : '',
+    hasNoResults ? styles.noResults : '',
   ].filter(Boolean).join(' ');
 
   return (
     <div className={wrapperClasses} ref={wrapperRef}>
       <div className={styles.header}>
         <div className={styles.leftSection}>
-          {/* Иконка с фиксированным контейнером 52×52 */}
-          <div className={`${styles.iconContainer} ${styles[getIconState()]}`}>
+          <div className={`${styles.iconContainer} ${styles[iconState]}`}>
             <PinPathIcon className={styles.icon} />
           </div>
 
@@ -120,15 +119,17 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
         </div>
 
         <button 
-          className={styles.actionButton}
+          className={`${styles.actionButton} ${hasSelectedItem ? styles.actionButtonDone : ''}`}
           onClick={toggleDropdown}
           type="button"
         >
           <span className={styles.buttonContent}>
             <span className={styles.buttonText}>
-              {isOpen ? collapseButtonText : addButtonText}
+              {hasSelectedItem ? doneButtonText : isOpen ? collapseButtonText : addButtonText}
             </span>
-            {isOpen ? (
+            {hasSelectedItem ? (
+              <CheckMarkIcon className={styles.buttonIcon} />
+            ) : isOpen ? (
               <ArrowUpIcon className={styles.buttonIcon} />
             ) : (
               <PlusIcon className={styles.buttonIcon} />
@@ -139,7 +140,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
 
       {isOpen && (
         <div className={styles.dropdown}>
-          {/* Поле поиска с иконкой лупы справа */}
+          {/* Поле поиска */}
           <div className={styles.searchContainer}>
             <input
               type="text"
@@ -150,60 +151,77 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
               autoFocus
             />
             <SearchIcon className={styles.searchIcon} />
-            {searchTerm && (
-              <button 
-                className={styles.clearButton} 
-                onClick={() => setSearchTerm('')}
-                type="button"
-              >
-                ✕
-              </button>
-            )}
           </div>
 
-          <div className={styles.listContainer}>
-            {groupedItems.cities && groupedItems.cities.length > 0 && (
-              <>
-                <div className={styles.sectionTitle}>{citiesTitle}</div>
-                <div className={styles.gridList}>
-                  {groupedItems.cities.map((item) => (
-                    <div
-                      key={item.id}
-                      className={`${styles.listItem} ${
-                        selectedItem?.id === item.id ? styles.selected : ''
-                      } ${item.isFeatured ? styles.featured : ''}`}
-                      onClick={() => handleSelect(item)}
-                    >
-                      {item.name}
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
+          {/* Контент: либо список, либо сообщение "не найдено" */}
+          {hasNoResults ? (
+            <div className={styles.emptyState}>
+              <ExclamationIcon className={styles.emptyIcon} />
+              <div className={styles.emptyTitle}>Город не найден</div>
+              <div className={styles.emptyDescription}>
+                Проверьте написание – или выберите город из списка.
+              </div>
+            </div>
+          ) : (
+            <div className={styles.listContainer}>
+              {groupedItems.cities && groupedItems.cities.length > 0 && (
+                <>
+                  <div className={styles.sectionTitle}>{citiesTitle}</div>
+                  <div className={styles.gridList}>
+                    {groupedItems.cities
+                      .filter(item => item.isFeatured)
+                      .map((item) => (
+                        <div
+                          key={item.id}
+                          className={`${styles.listItem} ${styles.featured} ${
+                            selectedItem?.id === item.id ? styles.selected : ''
+                          }`}
+                          onClick={() => handleSelect(item)}
+                        >
+                          {item.name}
+                        </div>
+                      ))}
+                    {groupedItems.cities
+                      .filter(item => !item.isFeatured)
+                      .map((item) => (
+                        <div
+                          key={item.id}
+                          className={`${styles.listItem} ${
+                            selectedItem?.id === item.id ? styles.selected : ''
+                          }`}
+                          onClick={() => handleSelect(item)}
+                        >
+                          {item.name}
+                        </div>
+                      ))}
+                  </div>
+                </>
+              )}
 
-            {groupedItems.countries && groupedItems.countries.length > 0 && (
-              <>
-                <div className={styles.sectionTitle}>{countriesTitle}</div>
-                <div className={styles.gridList}>
-                  {groupedItems.countries.map((item) => (
-                    <div
-                      key={item.id}
-                      className={`${styles.listItem} ${
-                        selectedItem?.id === item.id ? styles.selected : ''
-                      }`}
-                      onClick={() => handleSelect(item)}
-                    >
-                      {item.name}
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
+              {groupedItems.countries && groupedItems.countries.length > 0 && (
+                <>
+                  <div className={styles.sectionTitle}>{countriesTitle}</div>
+                  <div className={styles.gridList}>
+                    {groupedItems.countries.map((item) => (
+                      <div
+                        key={item.id}
+                        className={`${styles.listItem} ${
+                          selectedItem?.id === item.id ? styles.selected : ''
+                        }`}
+                        onClick={() => handleSelect(item)}
+                      >
+                        {item.name}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
-            {filteredItems.length === 0 && (
-              <div className={styles.noResults}>Ничего не найдено</div>
-            )}
-          </div>
+              {filteredItems.length === 0 && searchTerm.trim().length === 0 && (
+                <div className={styles.noResults}>Начните вводить название</div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

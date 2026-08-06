@@ -3,11 +3,12 @@ import { ConstructorSelection } from './components/ConstructorSelection';
 import type { ListItem } from './components/ConstructorSelection';
 import './App.css';
 
-// Данные из макета с выделением Москвы и Санкт-Петербурга
+// Данные из макета с выделением Москвы и СПб
 const items: ListItem[] = [
-  // Города России (Москва и СПб первыми, жирным шрифтом)
+  // Выделенные города (Москва и СПб) - идут первыми
   { id: 1, name: 'Москва', category: 'city', isFeatured: true },
   { id: 2, name: 'Санкт-Петербург', category: 'city', isFeatured: true },
+  // Остальные города
   { id: 3, name: 'Самара', category: 'city' },
   { id: 4, name: 'Барнаул', category: 'city' },
   { id: 5, name: 'Краснодар', category: 'city' },
@@ -58,6 +59,7 @@ function App() {
         placeholder='Например "Москва"'
         addButtonText="Добавить"
         collapseButtonText="Свернуть"
+        doneButtonText="Готово"
         onButtonClick={handleButtonClick}
         searchPlaceholder="Начните вводить название, а мы подскажем"
         citiesTitle="Города России"

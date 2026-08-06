@@ -4,9 +4,29 @@
   box-sizing: border-box;
 }
 
+
+/* Применяем шрифты ко всему приложению */
 body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-family: 'Source Sans Pro', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Если вы хотите использовать Poppins для заголовков, а Source Sans Pro для основного текста */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Основной текст и все элементы интерфейса */
+body, button, input, select, textarea {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Для компонента ConstructorSelection можно задать конкретный шрифт */
+.constructor-selection {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.constructor-selection .title {
+  font-family: 'Poppins', sans-serif;
 }

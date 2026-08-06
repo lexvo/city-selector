@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { ConstructorSelection } from './components/ConstructorSelection';
+import { PinPathIcon } from './assets/icons';
 import type { ListItem } from './components/ConstructorSelection';
 import './App.css';
 
-// Данные из макета с правильным порядком
+// Данные из макета
 const items: ListItem[] = [
-  // Выделенные города (Москва и СПб) - первыми
+  // Выделенные города (Москва и СПб)
   { id: 1, name: 'Москва', category: 'city', isFeatured: true },
   { id: 2, name: 'Санкт-Петербург', category: 'city', isFeatured: true },
-  // Остальные города - в алфавитном порядке, начиная со второй строки
+  // Остальные города
   { id: 3, name: 'Барнаул', category: 'city' },
   { id: 4, name: 'Владивосток', category: 'city' },
   { id: 5, name: 'Волгоград', category: 'city' },
@@ -52,6 +53,7 @@ function App() {
   return (
     <div className="app">
       <ConstructorSelection
+        icon={<PinPathIcon />}
         items={items}
         selectedItem={selectedItem}
         onItemSelect={setSelectedItem}

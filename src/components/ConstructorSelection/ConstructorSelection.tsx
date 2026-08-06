@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { PinPathIcon, PlusIcon, ArrowUpIcon, SearchIcon, CheckMarkIcon, ExclamationIcon } from '../../assets/icons';
+import { PlusIcon, ArrowUpIcon, SearchIcon, CheckMarkIcon, ExclamationIcon } from '../../assets/icons';
 import styles from './ConstructorSelection.module.css';
 
 // --- Типы ---
@@ -12,23 +12,38 @@ export interface ListItem {
 }
 
 export interface ConstructorSelectionProps {
+  /** Иконка для отображения слева */
+  icon: React.ReactNode;
+  /** Список элементов для выбора */
   items: ListItem[];
+  /** Выбранный элемент */
   selectedItem: ListItem | null;
+  /** Callback при выборе */
   onItemSelect: (item: ListItem) => void;
+  /** Заголовок (например, "Откуда едем?") */
   title?: string;
+  /** Текст-заполнитель, когда ничего не выбрано */
   placeholder?: string;
+  /** Текст кнопки "Добавить" */
   addButtonText?: string;
+  /** Текст кнопки "Свернуть" */
   collapseButtonText?: string;
+  /** Текст кнопки "Готово" */
   doneButtonText?: string;
+  /** Callback при клике на кнопку (опционально) */
   onButtonClick?: () => void;
+  /** Плейсхолдер для поиска */
   searchPlaceholder?: string;
+  /** Заголовок секции "Города России" */
   citiesTitle?: string;
+  /** Заголовок секции "Другие страны" */
   countriesTitle?: string;
 }
 
 // --- Компонент ---
 
 export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
+  icon,
   items,
   selectedItem,
   onItemSelect,
@@ -102,6 +117,21 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     hasNoResults ? styles.noResults : '',
   ].filter(Boolean).join(' ');
 
+  // --- Определяем текст и иконку кнопки ---
+  let buttonText = addButtonText;
+  let ButtonIcon = PlusIcon;
+
+  if (hasSelectedItem) {
+    buttonText = doneButtonText;
+    ButtonIcon = CheckMarkIcon;
+  } else if (isOpen && !hasNoResults) {
+    buttonText = collapseButtonText;
+    ButtonIcon = ArrowUpIcon;
+  } else {
+    buttonText = addButtonText;
+    ButtonIcon = PlusIcon;
+  }
+
   // Разделяем города на выделенные и остальные
   const featuredCities = groupedItems.cities?.filter(item => item.isFeatured) || [];
   const regularCities = groupedItems.cities?.filter(item => !item.isFeatured) || [];
@@ -118,7 +148,7 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
       <div className={styles.header}>
         <div className={styles.leftSection}>
           <div className={`${styles.iconContainer} ${styles[iconState]}`}>
-            <PinPathIcon className={styles.icon} />
+            {icon}
           </div>
 
           <div className={styles.textContainer}>
@@ -135,16 +165,8 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
           type="button"
         >
           <span className={styles.buttonContent}>
-            <span className={styles.buttonText}>
-              {hasSelectedItem ? doneButtonText : isOpen ? collapseButtonText : addButtonText}
-            </span>
-            {hasSelectedItem ? (
-              <CheckMarkIcon className={styles.buttonIcon} />
-            ) : isOpen ? (
-              <ArrowUpIcon className={styles.buttonIcon} />
-            ) : (
-              <PlusIcon className={styles.buttonIcon} />
-            )}
+            <span className={styles.buttonText}>{buttonText}</span>
+            <ButtonIcon className={styles.buttonIcon} />
           </span>
         </button>
       </div>
@@ -173,12 +195,10 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
             </div>
           ) : (
             <div className={styles.listContainer}>
-              {/* Секция городов */}
               {(featuredCities.length > 0 || regularCities.length > 0) && (
                 <>
                   <div className={styles.sectionTitle}>{citiesTitle}</div>
                   
-                  {/* Выделенные города (Москва, СПб) в отдельном ряду */}
                   {featuredCities.length > 0 && (
                     <div className={styles.featuredGrid}>
                       {featuredCities.map((item) => (
@@ -195,7 +215,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
                     </div>
                   )}
 
-                  {/* Остальные города в 3 колонки (сверху вниз) */}
                   {regularCities.length > 0 && (
                     <div className={styles.regularGrid}>
                       {columns.map((column, colIndex) => (
@@ -218,7 +237,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
                 </>
               )}
 
-              {/* Секция стран */}
               {groupedItems.countries && groupedItems.countries.length > 0 && (
                 <>
                   <div className={styles.sectionTitle}>{countriesTitle}</div>

@@ -1,7 +1,7 @@
 /* --- Обертка --- */
 .wrapper {
   width: 920px;
-  font-family: 'Source Sans Pro', sans-serif; /* Основной шрифт для всего компонента */
+  font-family: 'Source Sans Pro', sans-serif;
   position: relative;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
@@ -68,7 +68,17 @@
   background-color: transparent;
 }
 
-/* --- Иконка (46×46) — через children, стили применяются к дочернему элементу --- */
+/* --- Состояние: открыто (синий фон) --- */
+.iconContainer.open {
+  background-color: #e6f0ff;
+}
+
+/* --- Состояние: выбрано (зеленый фон) --- */
+.iconContainer.selected {
+  background-color: #e6f5e6;
+}
+
+/* --- Иконка (46×46) — применяем цвет через дочерний SVG --- */
 .iconContainer svg {
   width: 46px;
   height: 46px;
@@ -76,10 +86,12 @@
   transition: color 0.3s ease;
 }
 
+/* --- Цвет иконки в состоянии "открыто" --- */
 .iconContainer.open svg {
   color: #0E68D4;
 }
 
+/* --- Цвет иконки в состоянии "выбрано" --- */
 .iconContainer.selected svg {
   color: #3CB371;
 }
@@ -99,7 +111,7 @@
   color: #888;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  font-family: 'Poppins', sans-serif; /* Заголовок — Poppins */
+  font-family: 'Poppins', sans-serif;
 }
 
 .description {
@@ -110,7 +122,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.3;
-  font-family: 'Source Sans Pro', sans-serif; /* Описание — Source Sans Pro */
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 .description.placeholder {
@@ -255,7 +267,7 @@
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 8px;
-  font-family: 'Poppins', sans-serif; /* Заголовок — Poppins */
+  font-family: 'Poppins', sans-serif;
 }
 
 .emptyDescription {
@@ -263,7 +275,7 @@
   color: #888;
   max-width: 380px;
   line-height: 1.5;
-  font-family: 'Source Sans Pro', sans-serif; /* Описание — Source Sans Pro */
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 /* --- Список --- */
@@ -285,7 +297,7 @@
   margin: 12px 0 8px;
   padding-bottom: 0;
   border-bottom: none;
-  font-family: 'Poppins', sans-serif; /* Заголовки секций — Poppins */
+  font-family: 'Poppins', sans-serif;
 }
 
 /* --- Сетка для выделенных городов (Москва, СПб) --- */
@@ -322,7 +334,7 @@
   border-radius: 0;
   cursor: pointer;
   transition: background-color 0.15s ease;
-  font-family: 'Source Sans Pro', sans-serif; /* Все города и страны — Source Sans Pro */
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 /* --- Выделенные города (Москва, СПб) --- */

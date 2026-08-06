@@ -102,6 +102,17 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
     hasNoResults ? styles.noResults : '',
   ].filter(Boolean).join(' ');
 
+  // Разделяем города на выделенные и остальные
+  const featuredCities = groupedItems.cities?.filter(item => item.isFeatured) || [];
+  const regularCities = groupedItems.cities?.filter(item => !item.isFeatured) || [];
+
+  // Разбиваем обычные города на колонки для отображения сверху вниз
+  const chunkSize = Math.ceil(regularCities.length / 3);
+  const columns = [];
+  for (let i = 0; i < regularCities.length; i += chunkSize) {
+    columns.push(regularCities.slice(i, i + chunkSize));
+  }
+
   return (
     <div className={wrapperClasses} ref={wrapperRef}>
       <div className={styles.header}>
@@ -140,7 +151,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
 
       {isOpen && (
         <div className={styles.dropdown}>
-          {/* Поле поиска */}
           <div className={styles.searchContainer}>
             <input
               type="text"
@@ -153,7 +163,6 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
             <SearchIcon className={styles.searchIcon} />
           </div>
 
-          {/* Контент: либо список, либо сообщение "не найдено" */}
           {hasNoResults ? (
             <div className={styles.emptyState}>
               <ExclamationIcon className={styles.emptyIcon} />
@@ -164,13 +173,15 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
             </div>
           ) : (
             <div className={styles.listContainer}>
-              {groupedItems.cities && groupedItems.cities.length > 0 && (
+              {/* Секция городов */}
+              {(featuredCities.length > 0 || regularCities.length > 0) && (
                 <>
                   <div className={styles.sectionTitle}>{citiesTitle}</div>
-                  <div className={styles.gridList}>
-                    {groupedItems.cities
-                      .filter(item => item.isFeatured)
-                      .map((item) => (
+                  
+                  {/* Выделенные города (Москва, СПб) в отдельном ряду */}
+                  {featuredCities.length > 0 && (
+                    <div className={styles.featuredGrid}>
+                      {featuredCities.map((item) => (
                         <div
                           key={item.id}
                           className={`${styles.listItem} ${styles.featured} ${
@@ -181,23 +192,33 @@ export const ConstructorSelection: React.FC<ConstructorSelectionProps> = ({
                           {item.name}
                         </div>
                       ))}
-                    {groupedItems.cities
-                      .filter(item => !item.isFeatured)
-                      .map((item) => (
-                        <div
-                          key={item.id}
-                          className={`${styles.listItem} ${
-                            selectedItem?.id === item.id ? styles.selected : ''
-                          }`}
-                          onClick={() => handleSelect(item)}
-                        >
-                          {item.name}
+                    </div>
+                  )}
+
+                  {/* Остальные города в 3 колонки (сверху вниз) */}
+                  {regularCities.length > 0 && (
+                    <div className={styles.regularGrid}>
+                      {columns.map((column, colIndex) => (
+                        <div key={colIndex} className={styles.column}>
+                          {column.map((item) => (
+                            <div
+                              key={item.id}
+                              className={`${styles.listItem} ${
+                                selectedItem?.id === item.id ? styles.selected : ''
+                              }`}
+                              onClick={() => handleSelect(item)}
+                            >
+                              {item.name}
+                            </div>
+                          ))}
                         </div>
                       ))}
-                  </div>
+                    </div>
+                  )}
                 </>
               )}
 
+              {/* Секция стран */}
               {groupedItems.countries && groupedItems.countries.length > 0 && (
                 <>
                   <div className={styles.sectionTitle}>{countriesTitle}</div>

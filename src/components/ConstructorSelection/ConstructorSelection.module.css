@@ -289,23 +289,43 @@
   border-bottom: none;
 }
 
-/* --- Сетка в 3 колонки --- */
-.gridList {
+/* --- Сетка для выделенных городов (Москва, СПб) --- */
+.featuredGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 4px 12px;
+  padding-left: 0;
+  margin-left: 0;
+  margin-bottom: 4px;
+}
+
+/* --- Сетка для остальных городов (3 колонки, сверху вниз) --- */
+.regularGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0 12px;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* --- Колонка внутри regularGrid --- */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 /* --- Элемент списка --- */
 .listItem {
-  padding: 6px 8px;
+  padding: 6px 8px 6px 0;
   font-size: 14px;
   color: #1a1a1a;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
+/* --- Выделенные города (Москва, СПб) --- */
 .listItem.featured {
   font-weight: 700;
   color: #1a1a1a;
@@ -313,12 +333,25 @@
 
 .listItem:hover {
   background-color: #f0f5ff;
+  border-radius: 6px;
+  padding-left: 6px;
 }
 
 .listItem.selected {
   background-color: #e6f0ff;
   font-weight: 500;
   color: #0E68D4;
+  border-radius: 6px;
+  padding-left: 6px;
+}
+
+/* --- Сетка для стран (3 колонки, слева направо) --- */
+.gridList {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px 12px;
+  padding-left: 0;
+  margin-left: 0;
 }
 
 /* --- Сообщение "Начните вводить название" --- */

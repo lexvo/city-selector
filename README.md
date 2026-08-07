@@ -1,3 +1,15 @@
+# Тестовое задание. 
+- Сделать универсальный компонент для переиспользования по макету из Figma, реализовать через него выбор города. 
+- Ссылка на макет:
+https://www.figma.com/design/ZKcQPHFfvHnhCs4FUMm0AL/Component?node-id=1-988&t=PCoWt0uEvqCsCZnQ-0
+
+## Идеи для рефакторинга:
+1. привести к более точному соответствию методом Pixel Perfect
+2. Добавить аэропорт при выборе города. Например: Екатеринбург (Кольцово)
+
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

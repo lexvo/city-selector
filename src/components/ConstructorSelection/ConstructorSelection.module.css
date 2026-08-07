@@ -275,19 +275,23 @@
 }
 
 .emptyTitle {
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  color: #5F6C7B;
   font-family: 'Poppins', sans-serif;
+  line-height: 44px;
+  letter-spacing: -0.005em; /* -0.5% */
+  margin-bottom: 8px;
 }
 
 .emptyDescription {
-  font-size: 14px;
-  color: #888;
+  font-size: 16px;
+  font-weight: 500;
+  color: #5F6C7B;
+  font-family: 'Poppins', sans-serif;
+  line-height: 20px;
+  letter-spacing: 0.015em; /* 1.5% */
   max-width: 380px;
-  line-height: 1.5;
-  font-family: 'Source Sans Pro', sans-serif;
 }
 
 /* --- Список --- */
@@ -341,8 +345,8 @@
 /* --- Элемент списка (города и страны) --- */
 .listItem {
   padding: 6px 8px 6px 0;
-  font-size: 16px; /* Увеличен размер шрифта */
-  line-height: 20px; /* Добавлена высота строки */
+  font-size: 16px;
+  line-height: 20px;
   color: #1a1a1a;
   border-radius: 0;
   cursor: pointer;

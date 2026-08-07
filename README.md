@@ -8,7 +8,90 @@ https://www.figma.com/design/ZKcQPHFfvHnhCs4FUMm0AL/Component?node-id=1-988&t=PC
 2. Добавить аэропорт при выборе города. Например: Екатеринбург (Кольцово)
 
 
+# ConstructorSelection — Компонент выбора города
+
+Компонент выбора города/страны с поиском, группировкой и визуальными состояниями. Разработан на **React + TypeScript + Vite**.
+
+## 📋 Требования
+
+- **Node.js** — версия 18 или выше
+- **npm** или **yarn** — менеджер пакетов
+
+## 🚀 Быстрый старт
+
+### 1. Клонируйте репозиторий
+
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
+```
+
+### 2. Установите зависимости
+
+```npm install
+# или
+yarn install
+```
 ---
+
+### 3. Запустите проект в режиме разработки
+```
+npm run dev
+# или
+yarn dev
+```
+После запуска проект будет доступен по адресу: http://localhost:3000
+
+### 4. Сборка для продакшена
+
+```npm run build
+# или
+yarn build
+```
+
+### 5. Предпросмотр собранного проекта
+
+```npm run preview
+# или
+yarn preview
+```
+
+ ## Структура проекта
+```
+text
+src/
+├── assets/
+│   └── icons/              # Векторные иконки (SVG)
+│       ├── pin-path.svg    # Основная иконка
+│       ├── plus.svg        # Иконка "+"
+│       ├── arrow-up.svg    # Иконка "^"
+│       ├── search.svg      # Иконка лупы
+│       ├── check-mark.svg  # Иконка галочки
+│       └── exclamation.svg # Иконка восклицания
+│
+├── components/
+│   └── ConstructorSelection/
+│       ├── ConstructorSelection.tsx        # Основной компонент
+│       ├── ConstructorSelection.module.css # Стили компонента
+│       └── index.ts                       # Экспорт компонента
+│
+├── App.tsx                  # Главное приложение (пример использования)
+├── App.css                  # Стили приложения
+├── main.tsx                 # Точка входа
+└── vite-env.d.ts           # Типы для Vite
+```
+
+### Технологии
+- React 18 — библиотека для UI
+- TypeScript — типизация
+- Vite — сборщик
+- CSS Modules — изолированные стили
+- SVGR — импорт SVG как React-компонентов
+
+
+---
+---
+
 
 # React + TypeScript + Vite
 

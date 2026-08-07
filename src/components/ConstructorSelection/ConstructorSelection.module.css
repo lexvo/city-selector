@@ -78,7 +78,7 @@
   background-color: #e6f5e6;
 }
 
-/* --- Иконка (46×46) — применяем цвет через дочерний SVG --- */
+/* --- Иконка (46×46) --- */
 .iconContainer svg {
   width: 46px;
   height: 46px;
@@ -86,12 +86,10 @@
   transition: color 0.3s ease;
 }
 
-/* --- Цвет иконки в состоянии "открыто" --- */
 .iconContainer.open svg {
   color: #0E68D4;
 }
 
-/* --- Цвет иконки в состоянии "выбрано" --- */
 .iconContainer.selected svg {
   color: #3CB371;
 }
@@ -135,7 +133,6 @@
   padding: 0;
   background: transparent;
   border: none;
-  color: #0E68D4;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -144,7 +141,21 @@
   white-space: nowrap;
 }
 
+/* --- Цвет кнопки по умолчанию (Добавить) --- */
+.actionButton {
+  color: #5F6C7B;
+}
+
+/* --- Цвет кнопки в открытом состоянии (Свернуть) --- */
+.wrapper.open .actionButton:not(.actionButtonDone) {
+  color: #0E68D4;
+}
+
 .actionButton:hover {
+  color: #3a4a5a;
+}
+
+.wrapper.open .actionButton:not(.actionButtonDone):hover {
   color: #0056b3;
 }
 
@@ -156,6 +167,7 @@
   transform: scale(0.96);
 }
 
+/* --- Кнопка в состоянии "выбрано" (зеленая) --- */
 .actionButtonDone {
   color: #3CB371;
 }
@@ -287,13 +299,13 @@
   background-color: #ffffff;
 }
 
-/* --- Заголовки секций (без горизонтальных линий) --- */
+/* --- Заголовки секций (черный, 18px, 700, без капслока) --- */
 .sectionTitle {
-  font-size: 12px;
-  font-weight: 600;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: none;
+  letter-spacing: 0;
   margin: 12px 0 8px;
   padding-bottom: 0;
   border-bottom: none;
@@ -329,7 +341,8 @@
 /* --- Элемент списка (города и страны) --- */
 .listItem {
   padding: 6px 8px 6px 0;
-  font-size: 14px;
+  font-size: 16px; /* Увеличен размер шрифта */
+  line-height: 20px; /* Добавлена высота строки */
   color: #1a1a1a;
   border-radius: 0;
   cursor: pointer;
